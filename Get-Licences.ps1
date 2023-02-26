@@ -63,7 +63,8 @@ function Get-Licenses ($Path  ='', $OutputPath = 'licenses.json') {
         $i = 0
         $licenses."module name" | %{
             # バージョンの部分を取り除いて、パッケージ名だけを検索
-            if ($_ -match ("^${k}@.*")) {
+
+            if ($_ -match ("^${package}@.*")) {
                 # license-checkerからの情報を取得
                 $e2 = $true
                 $license = $licenses[$i]
@@ -74,11 +75,11 @@ function Get-Licenses ($Path  ='', $OutputPath = 'licenses.json') {
         if ($e2) {
             # license-chekerの結果に含まれている場合は出力対象としてデータを作成
             $lic = New-Object PSCustomObject -Property @{
-                Name=$package
-                Version=$version
-                LicenseName=$fname
-                Licence=$license.license
-                Content="$licenseContent".Replace("`r`n", "`n")
+                name=$package
+                version=$version
+                licenseName=$fname
+                licence=$license.license
+                content="$licenseContent".Replace("`r`n", "`n")
             }
             $licList.Add($lic) | Out-Null
         } else {
