@@ -38,7 +38,7 @@ function Get-Licenses ($Path  ='', $OutputPath = 'licenses.json') {
         # パッケージ名
         $package = $_
         # バージョン
-        $version = $packageJson.dependencies.$package
+        $needed = $packageJson.dependencies.$package
 
         # ライセンスファイルを取得する(.mdや.txtにも対応できるように、matchで検索する)
         $flist = (ls "${Path}\node_modules\$($package)\" | ?{ $_ -match 'LICENSE' -and -not $_.PSIsContainer })
@@ -75,8 +75,9 @@ function Get-Licenses ($Path  ='', $OutputPath = 'licenses.json') {
         if ($e2) {
             # license-chekerの結果に含まれている場合は出力対象としてデータを作成
             $lic = New-Object PSCustomObject -Property @{
+                fullName=$license.'module name'
                 name=$package
-                version=$version
+                needed=$needed
                 licenseName=$fname
                 licence=$license.license
                 content="$licenseContent".Replace("`r`n", "`n")
