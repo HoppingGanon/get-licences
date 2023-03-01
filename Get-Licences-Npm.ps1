@@ -1,5 +1,5 @@
 
-function Get-Licenses-Npm ($Path  ='', $OutputPath = 'npm-licenses.json') {
+function Get-Licenses-Npm ($Path  ='', $OutputPath = 'npm-licenses.json', [Switch]$DevDependencies = $false ) {
     # コマンドが使えるか確認
     $commandInfo = $null
     $commandInfo = Get-Command 'license-checker'
@@ -34,11 +34,18 @@ function Get-Licenses-Npm ($Path  ='', $OutputPath = 'npm-licenses.json') {
     $licList = New-Object Collections.ArrayList
 
     # package.jsonのうち、dependenciesをループする
-    $packageJson.dependencies.psobject.properties.name | %{
+    $target = @()
+    if ($DevDependencies) {
+        $target = $packageJson.devDependencies
+    } else {
+        $target = $packageJson.dependencies
+    }
+
+    $target.psobject.properties.name | %{
         # パッケージ名
         $package = $_
         # バージョン
-        $needed = $packageJson.dependencies.$package
+        $needed = $target.$package
 
         # ライセンスファイルを取得する(.mdや.txtにも対応できるように、matchで検索する)
         $flist = (ls "${Path}\node_modules\$($package)\" | ?{ $_ -match 'LICENSE' -and -not $_.PSIsContainer })

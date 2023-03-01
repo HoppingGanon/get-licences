@@ -37,6 +37,7 @@ npmでパッケージのライセンスを確認できる`license-checker`コマ
 |:-|:-|:-|
 |1|Path|調査を行うディレクトリ(省略するとカレントディレクトリ)|
 |2|OutputPath|調査結果のJSONファイルパス(省略とカレントディレクトリに'npm-licenses.json'として出力)|
+|3|DevDependencies|switch型、付与しないとdependenciesを出力、付与するとdevDependenciesを出力する|
 
 # Get-Licenses-Go
 Goのライセンス情報を出力します。
